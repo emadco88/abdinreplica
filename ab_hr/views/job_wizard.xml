@@ -1,0 +1,150 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record id="job_wizard_view_form" model="ir.ui.view">
+            <field name="name">job_wizard_view_form</field>
+            <field name="model">ab_hr_job_wizard</field>
+            <field name="arch" type="xml">
+                <form string="job_wizard_form">
+                    <script>
+                        $(document).ready(function(){
+                        $('.modal-dialog').css({'width': '97%', 'height': '97%'});
+                        $('.modal-content').css({'height': '100%'});
+                        $('.modal-body').css({'height': '100%'});
+                        });
+                    </script>
+
+                    <sheet>
+                        <field name="action_date_type" invisible="1"/>
+                        <field name="invisible_job_title" invisible="1"/>
+                        <field name="invisible_workplace" invisible="1"/>
+                        <field name="manpower_effect" invisible="1"/>
+                        <field name="invisible_job_id" invisible="1"/>
+                        <field name="type_of_action" invisible="1"/>
+
+                        <group class="h2 text-muted text-center">
+                            <field name="accid" readonly="1" nolabel="1" class="h1 text-muted"/>
+                        </group>
+                        <group class="h2 text-info text-center">
+                            <field name="employee_id" readonly="1" nolabel="1"/>
+                        </group>
+                        <group attrs="{'invisible':[('type_of_action','in',['3','4'])]}"
+                               class="h2 text-info text-center">
+                            <field name="job_id"
+                                   readonly="1" nolabel="1"/>
+                        </group>
+                        <group attrs="{'invisible':[('type_of_action','in',['1','2'])]}"
+                               class="h2 text-info text-center">
+                            <field name="manpower_id"
+                                   readonly="1" nolabel="1"/>
+                        </group>
+                        <group class="h2 text-info text-center"
+                               attrs="{'invisible':[('type_of_action','in',['1','2'])]}">
+                            <field name="workplace"
+                                   class="h2 text-info text-center"
+                                   readonly="1"
+                                   nolabel="1"/>
+                        </group>
+                        <group invisible="1">
+                            <field name="employee_id"/>
+                            <field name="job_id"/>
+                            <field name="manpower_id"/>
+                            <field name="workplace"/>
+                            <field name="job_title"/>
+                        </group>
+                        <div class="text-center pt-5">
+                            <div class="h2 d-flex justify-content-center align-items-center">
+                                <div>
+                                    <field name="action_type"
+                                           options="{'no_create': True, 'no_create_edit':True, 'no_open':True}"
+                                           domain="[('type','=', type_of_action)]"
+                                           nolabel="1" placeholder="Action Type"/>
+                                </div>
+                                <div>
+                                    <field name="action_date" nolabel="1" placeholder="Action Date"/>
+                                </div>
+                                <div>
+                                    <field name="alt_job_id" nolabel="1"
+                                           domain="[
+                                           ('action_type.action_date_type','in',['pending_issue','direct_issue']),
+                                           ('alt_job_id','=',False)
+                                           ]"
+                                           attrs="{
+                                                'invisible':[
+                                                    ('manpower_effect','=',False),
+                                                    ],
+                                                'readonly':[
+                                                    '|',
+                                                    ('type_of_action','in',['3','4']),
+                                                    ('action_type','=',False),
+                                                    ],
+                                                }"
+                                           placeholder="Alternative For"/>
+                                </div>
+                            </div>
+                        </div>
+
+                        <group class="h2 text-center" col="3">
+                            <group string="Job Title"
+                                   attrs="{'invisible':[
+                                                   ('type_of_action','in',['4']),
+                                                   ],}">
+                                <field name="job_title" nolabel="1"
+                                       attrs="{'invisible':[
+                                                   '|',
+                                                   ('action_type','=',False),
+                                                   ('invisible_job_title','=',True)],
+                                               'required':[
+                                                   ('action_type','!=',False),
+                                                   ('invisible_job_title','=',False)]}"/>
+                            </group>
+                            <group string="Workplace"
+                                   attrs="{'invisible':[
+                                                   ('type_of_action','in',['3','4']),
+                                                   ],}">
+                                <field name="workplace"
+                                       nolabel="1"
+                                       attrs="{'invisible':[
+                                                   '|',
+                                                   ('action_type','=',False),
+                                                   ('invisible_workplace','=',True),
+                                                   ],
+                                               'required':[
+                                                   ('action_type','!=',False),
+                                                   ('type_of_action','in',['1','2']),
+                                                   ('invisible_workplace','=',False)]}"/>
+                            </group>
+                            <group string="Territory"
+                                   attrs="{'invisible':[
+                                                   ('type_of_action','in',['4']),
+                                                   ],}">
+                                <field name="territory" nolabel="1"
+                                       attrs="{'invisible':[
+                                                   '|',
+                                                   ('action_type','=',False),
+                                                   ('invisible_workplace','=',True)],
+                                               'required':[
+                                                   ('action_type','!=',False),
+                                                   ('invisible_workplace','=',False)]}"/>
+                            </group>
+                        </group>
+
+                        <div>
+                            <field name="attached_file"/>
+                        </div>
+                        <div>
+                            <field name="notes" nolabel="1" class="h6" placeholder="Write Notes"/>
+                        </div>
+                    </sheet>
+                    <footer>
+                        <button name="action_save" string="Save and Close" type="object" class="btn btn-primary"/>
+                        <button string="Cancel" type="object" special="cancel"
+                                class="btn btn-outline-danger pull-right"/>
+                    </footer>
+                </form>
+            </field>
+        </record>
+
+
+    </data>
+</odoo>

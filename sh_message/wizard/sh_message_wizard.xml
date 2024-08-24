@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+
+        <record id="sh_message_wizard" model="ir.ui.view">
+            <field name="name">sh.message.wizard</field>
+            <field name="model">sh.message.wizard</field>
+            <field name="arch" type="xml">
+                <form string="Message">
+                    <field name="name"/>
+                    <field name="text"/>
+                    <field name="html"/>
+                    <field name="mode" invisible="1"/>
+
+                    <footer>
+                        <button string="OK" type="object" class="btn-primary" name="fn_method"/>
+                        <button string="Cancel" class="btn-secondary" special="cancel"
+                                attrs="{'invisible': [('mode', '==', False)]}"/>
+                    </footer>
+
+
+                </form>
+            </field>
+        </record>
+
+    </data>
+</odoo>

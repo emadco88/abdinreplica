@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="hr_employee_view_form_inherit_org_chart" model="ir.ui.view">
+        <field name="name">hr.employee.view.form.inherit.org_chart</field>
+        <field name="model">ab_hr_employee</field>
+        <field name="inherit_id" ref="ab_hr.ab_hr_employee_view_form"/>
+        <field name="arch" type="xml">
+
+            <xpath expr="//notebook/page[@name='job_occupied']" position="before">
+                <page string="Org Chart">
+                    <div class="row">
+                        <div id="o_work_employee_main" class="col-md-12 col-lg-6">
+                            <div id="o_employee_right">
+                                <h4 class="o_org_chart_title mb16 mt0">Organization Chart</h4>
+                                <field name="child_ids" widget="hr_org_chart" readonly="1"/>
+                            </div>
+                        </div>
+                    </div>
+
+                </page>
+            </xpath>
+        </field>
+    </record>
+
+
+</odoo>
