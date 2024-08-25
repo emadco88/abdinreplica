@@ -21,15 +21,9 @@ odoo.define('ab_inventory_adjust.barcode_reader', function (require) {
 
                     const itemsCount = await Helper.fetchDropdownItems(barcode);
 
-                    if (itemsCount !== 1) return;
-
-                    document.activeElement.dispatchEvent(new KeyboardEvent('keydown', {
-                        key: 'Tab',
-                        code: 'Tab',
-                        keyCode: 9,
-                        which: 9,
-                        bubbles: true
-                    }));
+                    if (itemsCount === 1) {
+                        Helper.sendKey('Tab', 9)
+                    }
                 }
             });
 

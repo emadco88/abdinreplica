@@ -139,6 +139,16 @@ odoo.define('ab_inventory_adjust.helper_functions', function (require) {
         }
     }
 
+    function sendKey(key, keyCode) {
+        document.activeElement.dispatchEvent(new KeyboardEvent('keydown', {
+            key: key,
+            code: key,
+            keyCode: keyCode,
+            which: keyCode,
+            bubbles: true
+        }));
+    }
+
     // Expose functions globally
     return {
         sleep,
@@ -146,6 +156,7 @@ odoo.define('ab_inventory_adjust.helper_functions', function (require) {
         collectBarcodeKeys,
         addLineIfNeeded,
         isActiveElementName,
+        sendKey,
         PREFIX
 
     };
