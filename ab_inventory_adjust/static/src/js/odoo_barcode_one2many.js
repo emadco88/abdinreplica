@@ -24,10 +24,14 @@ odoo.define('ab_inventory_adjust.barcode_reader', function (require) {
                     if (itemsCount === 1) {
                         Helper.sendKey('Tab', 9)
                     }
+
+
+                    setTimeout(() => {
+                        Helper.selectText(document.activeElement)
+                    }, 50)
                 }
             });
-
             return res;
-        }
+        },
     });
 });

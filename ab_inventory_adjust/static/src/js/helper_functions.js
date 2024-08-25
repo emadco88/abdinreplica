@@ -68,7 +68,6 @@ odoo.define('ab_inventory_adjust.helper_functions', function (require) {
                 if (event.key === PREFIX) {
                     // DO NOTHING
                 } else if (event.key === SUFFIX) {
-                    console.log(SUFFIX, ' is pressed...')
                     // event.preventDefault();
                     // document.removeEventListener('keydown', barcodeKeyListener);
                     // resolve(keys.join(''));
@@ -149,6 +148,14 @@ odoo.define('ab_inventory_adjust.helper_functions', function (require) {
         }));
     }
 
+    function selectText(element) {
+        console.log(element)
+        if (element && element.tagName === 'INPUT') {
+            element.focus();
+            element.select();
+        }
+    }
+
     // Expose functions globally
     return {
         sleep,
@@ -157,6 +164,7 @@ odoo.define('ab_inventory_adjust.helper_functions', function (require) {
         addLineIfNeeded,
         isActiveElementName,
         sendKey,
+        selectText,
         PREFIX
 
     };
