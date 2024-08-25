@@ -149,7 +149,6 @@ odoo.define('ab_inventory_adjust.helper_functions', function (require) {
     }
 
     function selectText(element) {
-        console.log(element)
         if (element && element.tagName === 'INPUT') {
             element.focus();
             element.select();
