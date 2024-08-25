@@ -7,15 +7,19 @@ odoo.define('ab_inventory_adjust.helper_functions', function (require) {
     const SUFFIX = 'Enter';
 
     // GLOBALLY PREVENT PREFIX and SUFFIX
-    function handleEvent(event) {
+    async function handleEvent(event) {
         // Check if the active element is the body and the key is the specified PREFIX
         if (event.key === PREFIX) {
             event.preventDefault(); // Prevent the default behavior
+            if (document.activeElement.tagName === 'BODY') {
+                await addLineIfNeeded();
+                await sleep(500);
+            }
         }
     }
 
     // Attach the event handler to the desired event type, e.g., keydown
-    document.addEventListener('keydown', handleEvent);
+    document.addEventListener('keydown', async (event) => await handleEvent(event));
 
 
     // Utility function to pause execution for a given number of milliseconds
@@ -64,6 +68,7 @@ odoo.define('ab_inventory_adjust.helper_functions', function (require) {
                 if (event.key === PREFIX) {
                     // DO NOTHING
                 } else if (event.key === SUFFIX) {
+                    console.log(SUFFIX, ' is pressed...')
                     // event.preventDefault();
                     // document.removeEventListener('keydown', barcodeKeyListener);
                     // resolve(keys.join(''));
@@ -75,7 +80,7 @@ odoo.define('ab_inventory_adjust.helper_functions', function (require) {
 
             // Listen for keydown events
             document.addEventListener('keydown', barcodeKeyListener);
-            sleep(500).then(() => {
+            sleep(350).then(() => {
                 document.removeEventListener('keydown', barcodeKeyListener);
                 resolve(keys.join(''));
             })
