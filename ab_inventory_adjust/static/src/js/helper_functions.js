@@ -87,6 +87,9 @@ odoo.define('ab_inventory_adjust.helper_functions', function (require) {
     }
 
     async function addLineIfNeeded() {
+        const productExist = document.querySelector('[name="product_id"]');
+        if (!productExist) return;
+
         if (!isActiveElementName('product_id')) {
             // If not in Many2One selection, click the "Add Line" button
             const addLineButton = document.querySelector('.o_field_x2many_list_row_add a');
