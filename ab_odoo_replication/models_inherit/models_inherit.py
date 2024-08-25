@@ -263,9 +263,10 @@ class ProductBarcode(models.Model):
         raise ValidationError("Not Valid")
 
     def write(self, values):
-        if self.env.context.get('replication'):
-            return self._ignore_write_date_update(values)
-        raise ValidationError("Not Valid")
+        return self._ignore_write_date_update(values)
+        # if self.env.context.get('replication'):
+        #     return self._ignore_write_date_update(values)
+        # raise ValidationError("Not Valid")
 
 
 class Product(models.Model):
