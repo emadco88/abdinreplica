@@ -4,14 +4,13 @@ odoo.define('ab_inventory_adjust.helper_functions', function (require) {
     const MAX_WAIT_TIME = 3000; // Maximum wait time in milliseconds (3 seconds)
     const CHECK_INTERVAL = 50; // Interval between checks in milliseconds
     const PREFIX = 'F12';
-    const SUFFIX = 'F10';
+    const SUFFIX = 'Enter';
 
     // GLOBALLY PREVENT PREFIX and SUFFIX
     function handleEvent(event) {
         // Check if the active element is the body and the key is the specified PREFIX
-        if (event.key === PREFIX || event.key === SUFFIX) {
+        if (event.key === PREFIX) {
             event.preventDefault(); // Prevent the default behavior
-            console.log('Default behavior prevented for key:', event.key);
         }
     }
 
@@ -40,7 +39,6 @@ odoo.define('ab_inventory_adjust.helper_functions', function (require) {
             if (listItems.length > 0) {
                 const rpcItems = await performSearch(barcode);
                 const rpcItemsCount = rpcItems.length;
-                console.log('rpcItemsCount', rpcItemsCount);
                 if (listItems.length !== rpcItemsCount) {
                     await sleep(500);
                 }
@@ -66,10 +64,9 @@ odoo.define('ab_inventory_adjust.helper_functions', function (require) {
                 if (event.key === PREFIX) {
                     // DO NOTHING
                 } else if (event.key === SUFFIX) {
-                    document.removeEventListener('keydown', barcodeKeyListener);
-                    resolve(keys.join(''));
-                } else if (event.key === 'Enter') {
-                    // DO NOTHING
+                    // event.preventDefault();
+                    // document.removeEventListener('keydown', barcodeKeyListener);
+                    // resolve(keys.join(''));
                 } else {
                     // Collect other keys
                     keys.push(event.key);
@@ -78,6 +75,10 @@ odoo.define('ab_inventory_adjust.helper_functions', function (require) {
 
             // Listen for keydown events
             document.addEventListener('keydown', barcodeKeyListener);
+            sleep(500).then(() => {
+                document.removeEventListener('keydown', barcodeKeyListener);
+                resolve(keys.join(''));
+            })
         });
     }
 
@@ -86,7 +87,6 @@ odoo.define('ab_inventory_adjust.helper_functions', function (require) {
             // If not in Many2One selection, click the "Add Line" button
             const addLineButton = document.querySelector('.o_field_x2many_list_row_add a');
             if (addLineButton) {
-                console.log('AddLineButton Clicked ...');
                 addLineButton.click();
             } else {
                 console.warn('Add button not found');
@@ -140,6 +140,7 @@ odoo.define('ab_inventory_adjust.helper_functions', function (require) {
         fetchDropdownItems,
         collectBarcodeKeys,
         addLineIfNeeded,
+        isActiveElementName,
         PREFIX
 
     };

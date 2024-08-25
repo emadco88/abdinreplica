@@ -17,6 +17,7 @@
         'web.assets_backend': [
             # 'ab_inventory_adjust/static/src/js/barcode_list_view.js',
             # 'ab_inventory_adjust/static/src/js/get_inventory_details.js',
+            'ab_inventory_adjust/static/src/js/override_enter_key_abstract_field.js',
             'ab_inventory_adjust/static/src/js/helper_functions.js',
             'ab_inventory_adjust/static/src/js/odoo_barcode_one2many.js',
         ],

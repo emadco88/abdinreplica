@@ -6,7 +6,6 @@ odoo.define('ab_inventory_adjust.barcode_reader', function (require) {
 
     FormController.include({
         start: function () {
-            console.log('start method is starting ...');
             const res = this._super.apply(this, arguments);
 
             let PREFIXPressed = false;
@@ -24,17 +23,13 @@ odoo.define('ab_inventory_adjust.barcode_reader', function (require) {
 
                     await helperFunctions.addLineIfNeeded();
 
-                    console.log('activeElement.classList', document.activeElement.classList);
                     document.activeElement.value = barcode;
-                    console.log(`Sending barcode ... ${barcode}`);
                     document.activeElement.dispatchEvent(new Event('input', {bubbles: true}));
 
                     const itemsCount = await helperFunctions.fetchDropdownItems(barcode);
-                    console.log('itemsCount', itemsCount);
 
                     if (itemsCount !== 1) return;
 
-                    console.log('Sending Tab Key ...');
                     document.activeElement.dispatchEvent(new KeyboardEvent('keydown', {
                         key: 'Tab',
                         code: 'Tab',
