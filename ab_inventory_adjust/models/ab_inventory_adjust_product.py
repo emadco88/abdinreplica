@@ -34,6 +34,7 @@ class AbInventoryAdjustProduct(models.Model):
         for rec in self:
             adjusted_before = False
             exist = self.env['ab_inventory_adjust_line'].search([
+                ('header_id.status', '=', 'done'),
                 ('product_id', '=', rec.product_id.id),
                 ('store_id', '=', rec.header_id.store_id.id),
                 ('create_date', '>', datetime.date.today() - datetime.timedelta(days=self.header_id.last_adjust_days)),
