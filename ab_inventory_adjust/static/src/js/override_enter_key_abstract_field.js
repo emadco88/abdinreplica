@@ -2,6 +2,7 @@ odoo.define('ab_inventory_adjust.override_enter', function (require) {
     "use strict";
 
     const AbstractField = require('web.AbstractField');
+    const Helper = require('ab_inventory_adjust.helper_functions');
 
     AbstractField.include({
         _onKeydown: function (ev) {
@@ -17,7 +18,7 @@ odoo.define('ab_inventory_adjust.override_enter', function (require) {
                     break;
                 case $.ui.keyCode.ENTER:
                     // Custom logic: Check if the current model is 'ab_inventory_adjust_header'
-                    if (this.record && this.record.model === 'ab_inventory_adjust_product') {
+                    if (Helper.isActiveElementName('product_id')) {
                         // ev.preventDefault();
                         // Skip stopPropagation if condition is met
                     } else {

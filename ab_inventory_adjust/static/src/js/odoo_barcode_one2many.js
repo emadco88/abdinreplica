@@ -7,19 +7,12 @@ odoo.define('ab_inventory_adjust.barcode_reader', function (require) {
     FormController.include({
         start: function () {
             const res = this._super.apply(this, arguments);
-
-            let PREFIXPressed = false;
-            let keysSent = false;
-
             this.$el.on('keydown', async function (event) {
 
-                if (event.key === Helper.PREFIX && !PREFIXPressed) {
-                    PREFIXPressed = true;
-                    keysSent = false;
+                if (event.key === Helper.PREFIX) {
                     event.preventDefault(); // Prevent default PREFIX behavior
 
                     const barcode = await Helper.collectBarcodeKeys();
-                    PREFIXPressed = false; // Reset PREFIX flag after processing
 
                     await Helper.addLineIfNeeded();
 
