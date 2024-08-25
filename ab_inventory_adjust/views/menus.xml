@@ -14,5 +14,12 @@
                   action="ab_product.ab_product_action"
                   sequence="100"/>
 
+        <menuitem id="ab_product_barcode_menu"
+                  name="Product Barcodes"
+                  parent="reports_sub_menu"
+                  action="ab_product.ab_product_barcode_action"
+                  sequence="101"/>
+
+
     </data>
 </odoo>

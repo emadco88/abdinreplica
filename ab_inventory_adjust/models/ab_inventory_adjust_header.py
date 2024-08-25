@@ -9,6 +9,7 @@ class AbdinInventoryEplusHeader(models.Model):
     _inherit = ['ab_eplus_replication', 'abdin_et.extra_tools', 'ab_eplus_connect']
 
     store_id = fields.Many2one('ab_store', required=True)
+    store_code = fields.Char(related='store_id.code')
     product_ids = fields.One2many('ab_inventory_adjust_product', 'header_id')
     price_difference = fields.Float(compute="compute_price_difference")
     number_of_products = fields.Integer(compute="compute_number_of_products")

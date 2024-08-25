@@ -58,8 +58,11 @@
                                 <field name="eplus_inv_id" placeholder="......"/>
                             </h1>
                         </div>
-                        <group>
+                        <group col="4">
                             <field name="store_id" attrs="{'readonly':[('status','=','done')]}"/>
+                            <field name="store_code"/>
+                        </group>
+                        <group>
                             <field name="adjust_type" attrs="{'readonly':[('status','=','done')]}"/>
                             <field name="last_adjust_days" attrs="{'readonly':[('status','=','done')]}"/>
                         </group>
