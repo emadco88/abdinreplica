@@ -1,4 +1,5 @@
 from odoo import api, fields, models, _
+from odoo.exceptions import UserError
 
 
 class OdooReplicationRun(models.AbstractModel):
@@ -32,7 +33,8 @@ class OdooReplicationRun(models.AbstractModel):
         # Group (5)
         self.replicate_model('ab_product_card', commit=True)
         self.replicate_model('ab_product', commit=True)
-        self.replicate_model('ab_product_barcode', limit=10000, commit=True, extra_fields={'product_ids': 'many2many'})
+        self.replicate_model('ab_product_barcode', limit=10000, commit=True,
+                             extra_fields={'product_ids': 'many2many'})
 
-        # Group (6)
-        # self.replicate_model('ab_announcement', commit=True, limit=100, extra_fields={'attachment': 'binary'})
+    # Group (6)
+    # self.replicate_model('ab_announcement', commit=True, limit=100, extra_fields={'attachment': 'binary'})
