@@ -2,7 +2,6 @@
 from time import sleep
 from xmlrpc import client
 import logging
-import ssl
 from odoo.exceptions import UserError
 from odoo import _
 
@@ -26,7 +25,6 @@ class OdooConnectionPool:
             cls._instance._setup_connection_params(env)
             _logger.info('Created new instance of OdooConnectionPool.')
         else:
-            _logger.info('Instance already exists. Checking connection.')
             if not cls._instance.check_connection():
                 _logger.warning('Connection is invalid. Creating a new instance.')
                 cls._instance = super(OdooConnectionPool, cls).__new__(cls)
@@ -53,7 +51,6 @@ class OdooConnectionPool:
                 model = client.ServerProxy(f"{self._srv}/xmlrpc/2/object", allow_none=True)
 
                 if uid:
-                    _logger.info("Connected to the server successfully.")
                     self._model = model
                     self._uid = uid
                     self._db = self._db_name
@@ -70,23 +67,23 @@ class OdooConnectionPool:
             raise UserError(_("Connection Failed, Check Your Connection"))
 
     def check_connection(self):
-        """Check if the current connection is still valid by querying a small model like res.partner."""
+        """Check if the current connection is still valid by querying a small model."""
         try:
-            if self._model:  # Ensure _model is not None
-                # Query a small model to validate the connection
-                result = self._model.execute_kw(self._db, self._uid, self._password, 'res.partner', 'search', [[]], {})
-                if isinstance(result, list):
-                    _logger.info("Connection to the server is valid. Successfully queried 'res.partner'.")
-                    return True
-                else:
-                    _logger.warning("Connection to the server is not valid.")
-                    return False
+            # Query the 'res.partner' model for a single record and only return the 'id' field
+            result = self._model.execute_kw(
+                self._db,
+                self._uid,
+                self._password,
+                'res.partner',
+                'search_read',
+                [[]],
+                {'fields': ['id'], 'limit': 1}
+            )
+            if result:
+                return True
             else:
-                _logger.warning("No model available for querying.")
+                _logger.warning("Connection to the server is not valid.")
                 return False
-        except (ssl.SSLEOFError, ConnectionError) as e:
-            _logger.error(f"Connection validation failed: {e}")
-            return False
         except Exception as e:
             _logger.error(f"Connection validation failed: {e}")
             return False
