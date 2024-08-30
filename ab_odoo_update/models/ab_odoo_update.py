@@ -1,5 +1,6 @@
 import os
 import subprocess
+import time  # Import the time module for adding a delay
 from odoo import models, api, tools
 
 
@@ -33,16 +34,27 @@ class OdooServerControl(models.AbstractModel):
     @api.model
     def restart_odoo_server(self):
         try:
-            # Step 3: Restart the Odoo server
             if os.name == 'nt':  # For Windows
-                # Restart the Odoo service using the correct service name
-                command = 'net stop odoo-server-15.0 && net start odoo-server-15.0'
+                # Step 3: Restart the Odoo service using the correct service name
+                stop_command = 'net stop odoo-server-15.0'
+                start_command = 'net start odoo-server-15.0'
+
+                # Stop the Odoo service
+                subprocess.run(stop_command, shell=True, check=True)
+
+                # Wait for a few seconds to ensure the service has fully stopped
+                time.sleep(10)
+
+                # Start the Odoo service
+                subprocess.run(start_command, shell=True, check=True)
+
             else:  # For Linux/Unix
                 # Example command for restarting Odoo on Linux
                 command = 'sudo systemctl restart odoo15'
-
-            subprocess.run(command, shell=True, check=True)
+                subprocess.run(command, shell=True, check=True)
 
             return {'status': 'success', 'message': 'Odoo server restarted successfully.'}
+        except subprocess.CalledProcessError as e:
+            return {'status': 'error', 'message': f'Failed to execute command: {e}'}
         except Exception as e:
             return {'status': 'error', 'message': str(e)}
