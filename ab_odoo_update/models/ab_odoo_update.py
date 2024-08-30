@@ -32,18 +32,17 @@ class OdooServerControl(models.AbstractModel):
             return {'status': 'error', 'message': str(e)}
 
     @api.model
-    def restart_odoo_service(self):
+    def restart_odoo_server(self):
         try:
-            # Step 1: Construct the path to the external script
-            script_path = os.path.join(tools.config['addons_path'], 'ab_odoo_update', 'restart_odoo_server.py')
+            # Path to the .bat file or its shortcut
+            bat_file_path = os.path.join(tools.config['addons_path'], 'ab_odoo_update', 'restart_odoo_server')
 
-            # Step 2: Ensure the script exists
-            if not os.path.isfile(script_path):
-                raise Exception(f"Script not found: {script_path}")
+            # Ensure the .bat file exists
+            if not os.path.isfile(bat_file_path):
+                raise Exception(f"Batch file not found: {bat_file_path}")
 
-            # Step 3: Use runas to run the script as admin
-            command = f'runas /user:Administrator "python {script_path}"'
-            subprocess.Popen(command, shell=True)
+            # Run the .bat file (admin privileges should be handled by the shortcut)
+            subprocess.Popen([bat_file_path], shell=True)
 
             return {'status': 'success', 'message': 'Restart command issued successfully.'}
         except Exception as e:
