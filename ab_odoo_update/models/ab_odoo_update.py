@@ -32,29 +32,18 @@ class OdooServerControl(models.AbstractModel):
             return {'status': 'error', 'message': str(e)}
 
     @api.model
-    def restart_odoo_server(self):
+    def restart_odoo_service(self):
         try:
-            if os.name == 'nt':  # For Windows
-                # Step 3: Restart the Odoo service using the correct service name
-                stop_command = 'net stop odoo-server-15.0'
-                start_command = 'net start odoo-server-15.0'
+            # Step 1: Construct the path to the external script
+            script_path = os.path.join(tools.config['addons_path'], 'ab_odoo_update', 'restart_odoo_server.py')
 
-                # Stop the Odoo service
-                subprocess.run(stop_command, shell=True, check=True)
+            # Step 2: Ensure the script exists
+            if not os.path.isfile(script_path):
+                raise Exception(f"Script not found: {script_path}")
 
-                # Wait for a few seconds to ensure the service has fully stopped
-                time.sleep(10)
+            # Step 3: Call the external script to restart the Odoo server
+            subprocess.Popen(['python', script_path], shell=True, creationflags=subprocess.CREATE_NEW_CONSOLE)
 
-                # Start the Odoo service
-                subprocess.run(start_command, shell=True, check=True)
-
-            else:  # For Linux/Unix
-                # Example command for restarting Odoo on Linux
-                command = 'sudo systemctl restart odoo15'
-                subprocess.run(command, shell=True, check=True)
-
-            return {'status': 'success', 'message': 'Odoo server restarted successfully.'}
-        except subprocess.CalledProcessError as e:
-            return {'status': 'error', 'message': f'Failed to execute command: {e}'}
+            return {'status': 'success', 'message': 'Restart command issued successfully.'}
         except Exception as e:
             return {'status': 'error', 'message': str(e)}
