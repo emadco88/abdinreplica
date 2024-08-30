@@ -32,7 +32,7 @@ class OdooServerControl(models.AbstractModel):
             return {'status': 'error', 'message': str(e)}
 
     @api.model
-    def restart_odoo_server(self):
+    def restart_odoo_service(self):
         try:
             # Step 1: Construct the path to the external script
             script_path = os.path.join(tools.config['addons_path'], 'ab_odoo_update', 'restart_odoo_server.py')
