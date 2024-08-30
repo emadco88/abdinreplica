@@ -16,3 +16,8 @@ class InventoryEplus(models.Model):
     cost = fields.Float(digits=(12, 3), required=True)
     itm_expiry_date = fields.Datetime()
     last_update_date = fields.Datetime(index=True)
+
+    _sql_constraints = [
+        ('product_store_cid_unique', 'unique(product_id,store_id,c_id)',
+         'product_id,store_id,c_id CAN NOT BE DUPLICATED!')]
+
