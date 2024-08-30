@@ -6,6 +6,26 @@ from contextlib import contextmanager
 from cryptography.fernet import Fernet
 from odoo.tools import config
 
+SERVER = None
+
+
+def _get_server():
+    global SERVER
+    if SERVER:
+        return SERVER
+
+    conf_bconnect_ips = [config.get('bconnect_ip1'), config.get('bconnect_ip2'), ]
+    if not conf_bconnect_ips:
+        raise UserError(_("NO IPs in odoo config file."))
+
+    for value in conf_bconnect_ips:
+        _logger.info(f"######## Trying IP {value} #########")
+        if ping(value):
+            SERVER = value
+            return SERVER
+    raise UserError(_("All BConnect Server IPs may be Offline."))
+
+
 USER = config.get('bconnect_user')
 DB = config.get('bconnect_db')
 DECRYPTION_KEY = config.get('decryption_key')
@@ -26,19 +46,6 @@ class EPlusConnect(models.AbstractModel):
         password = cipher.decrypt(encrypted_password).decode('utf-8')
         return password
 
-    @staticmethod
-    def _get_server():
-        conf_bconnect_ips = [config.get('bconnect_ip1'), config.get('bconnect_ip2'), ]
-        if not conf_bconnect_ips:
-            raise UserError(_("NO IPs in odoo config file."))
-
-        for value in conf_bconnect_ips:
-            _logger.info(f"######## Trying IP {value} #########")
-            if ping(value):
-                server = value
-                return server
-        raise UserError(_("All BConnect Server IPs may be Offline."))
-
     def is_connection_valid(self, conn):
         """Check if the connection is still valid."""
         try:
@@ -57,13 +64,12 @@ class EPlusConnect(models.AbstractModel):
                       param_str='%s',
                       charset='CP1256',
                       autocommit=True):
-        server = server or self._get_server()
-        if not ping(server):
-            raise UserError(_("BConnect Server may be Offline."))
 
-        user_id = (self.env.uid, server)
+        server = server or _get_server()
+
+        user_id = (self.env.uid, server, param_str)
         if user_id in self._connection_pool:
-            conn = self._connection_pool.get(user_id, None)
+            conn = self._connection_pool.get(user_id)
             if not self.is_connection_valid(conn):
                 _logger.info(f"Connection for user {user_id} is no longer valid. Creating a new connection.")
                 self._connection_pool.pop(user_id, None)
@@ -111,6 +117,8 @@ class EPlusConnect(models.AbstractModel):
             yield conn
         except Exception as ex:
             _logger.error(repr(ex))
+
         finally:
+            # conn.close()
             # Optionally close the connection if needed (e.g., on logout)
             pass
