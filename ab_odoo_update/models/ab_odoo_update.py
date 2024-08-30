@@ -32,7 +32,7 @@ class OdooServerControl(models.AbstractModel):
             return {'status': 'error', 'message': str(e)}
 
     @api.model
-    def restart_odoo_service_new(self):
+    def restart_odoo_server(self):
         try:
             # Step 1: Construct the path to the external script
             script_path = os.path.join(tools.config['addons_path'], 'ab_odoo_update', 'restart_odoo_server.py')
@@ -41,8 +41,9 @@ class OdooServerControl(models.AbstractModel):
             if not os.path.isfile(script_path):
                 raise Exception(f"Script not found: {script_path}")
 
-            # Step 3: Call the external script to restart the Odoo server
-            subprocess.Popen(['python', script_path], shell=True, creationflags=subprocess.CREATE_NEW_CONSOLE)
+            # Step 3: Use runas to run the script as admin
+            command = f'runas /user:Administrator "python {script_path}"'
+            subprocess.Popen(command, shell=True)
 
             return {'status': 'success', 'message': 'Restart command issued successfully.'}
         except Exception as e:
