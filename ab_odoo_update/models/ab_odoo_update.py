@@ -43,7 +43,7 @@ class OdooServerControl(models.AbstractModel):
                     break
 
             # Construct the path to the Python executable
-            python_path = os.path.join(script_path, '..', 'python', 'python.exe')
+            python_path = os.path.join(script_path, '..', 'python---old', 'python.exe')
 
             # Construct the path to the external script
             script_path = os.path.join(script_path, 'ab_odoo_update', 'restart_odoo_server.py')
