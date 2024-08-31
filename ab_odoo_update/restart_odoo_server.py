@@ -1,8 +1,13 @@
+import os
 import subprocess
 
-service_name = 'odoo-server-15.0'
+script_dir = os.path.dirname(os.path.abspath(__file__))
 
+# Full path to your batch file
+batch_file = os.path.join(script_dir, 'restart_odoo.bat')
 if __name__ == '__main__':
-    subprocess.Popen(f'net stop odoo-server-15.0  && net start odoo-server-15.0', shell=True)
-    # subprocess.run(f'net stop odoo-server-15.0  && net start odoo-server-15.0', shell=True)
-    # subprocess.run(f'start "" "restart_odoo_server"', shell=True)
+    # Run the batch file as administrator using PowerShell and keep the window open
+    subprocess.run([
+        'powershell', '-Command',
+        f'Start-Process cmd -ArgumentList "/k {batch_file}" -Verb RunAs'
+    ], shell=True)
