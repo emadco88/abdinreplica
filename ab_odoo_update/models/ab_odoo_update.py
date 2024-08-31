@@ -48,7 +48,7 @@ class OdooServerControl(models.AbstractModel):
         if not os.path.isfile(script_path):
             raise UserError(f"Script not found: {script_path}")
 
-        _logger.info('///////////////////')
+        _logger.info('******////////********')
         _logger.info(f'script_path: {script_path}')
 
         # Step 3: Use runas to run the script as admin
