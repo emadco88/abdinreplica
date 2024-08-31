@@ -54,8 +54,8 @@ class OdooServerControl(models.AbstractModel):
             if not os.path.isfile(script_path):
                 raise Exception(f"Script not found: {script_path}")
 
-            _logger.info(f'Python executable path: {python_path}')
-            _logger.info(f'Script path: {script_path}')
+            _logger.info(f'Python executable path:\n {python_path}')
+            _logger.info(f'Script path:\n {script_path}')
 
             # Replace backslashes with double backslashes for Windows compatibility
             python_path = python_path.replace('\\', '\\\\')
@@ -63,7 +63,7 @@ class OdooServerControl(models.AbstractModel):
 
             # Step 2: Use 'runas' to execute the script with admin privileges
             command = f'runas /user:Administrator "{python_path}" "{script_path}"'
-            _logger.info(f'Command to run: {command}')
+            _logger.info(f'Command to run: \n{command}')
 
             subprocess.Popen(command, shell=True)
             _logger.info('Restart command issued successfully.')
