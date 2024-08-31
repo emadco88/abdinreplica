@@ -4,6 +4,10 @@ import time  # Import the time module for adding a delay
 from odoo import models, api, tools
 from odoo.exceptions import UserError
 
+import logging
+
+_logger = logging.getLogger(__name__)
+
 
 class OdooServerControl(models.AbstractModel):
     _name = 'ab_odoo_update'
@@ -44,7 +48,8 @@ class OdooServerControl(models.AbstractModel):
 
             # Step 1: Construct the path to the external script
             script_path = os.path.join(script_path, 'ab_odoo_update', 'restart_odoo_server.py')
-
+            _logger.info('####################')
+            _logger.info(f'script_path: {script_path}')
             # Step 2: Ensure the script exists
             if not os.path.isfile(script_path):
                 raise UserError(f"Script not found: {script_path}")
