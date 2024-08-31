@@ -43,7 +43,7 @@ class OdooServerControl(models.AbstractModel):
                     break
 
             # Construct the path to the Python executable
-            python_path = os.path.join(script_path, 'python', 'python.exe')
+            python_path = os.path.join(script_path, '..', 'python', 'python.exe')
 
             # Construct the path to the external script
             script_path = os.path.join(script_path, 'ab_odoo_update', 'restart_odoo_server.py')
@@ -65,7 +65,7 @@ class OdooServerControl(models.AbstractModel):
             command = f'runas /user:Administrator "{python_path}" "{script_path}"'
             _logger.info(f'Command to run: \n{command}')
 
-            subprocess.Popen(command, shell=True)
+            subprocess.run([python_path, script_path], check=True)
             _logger.info('Restart command issued successfully.')
 
             return {'status': 'success', 'message': 'Restart command issued successfully.'}
