@@ -33,27 +33,42 @@ class OdooServerControl(models.AbstractModel):
 
     @api.model
     def restart_odoo_server(self):
-        script_path = ''
-        addons_path = tools.config['addons_path']
-        for path in addons_path.split(','):
-            if 'replica_addons' in path:
-                script_path = path.strip()
-                break
+        try:
+            # Step 1: Get the script path from addons_path
+            script_path = ''
+            addons_path = tools.config['addons_path']
+            for path in addons_path.split(','):
+                if 'replica_addons' in path:
+                    script_path = path.strip()
+                    break
 
-        # Step 1: Construct the path to the external script
-        python_path = os.path.join(script_path, '..', 'python', 'python.exe')
+            # Construct the path to the Python executable
+            python_path = os.path.join(script_path, '..', 'python', 'python.exe')
 
-        script_path = os.path.join(script_path, 'ab_odoo_update', 'restart_odoo_server.py')
-        _logger.info('####################')
-        _logger.info(f'script_path: {script_path}')
-        # Step 2: Ensure the script exists
-        if not os.path.isfile(script_path):
-            raise UserError(f"Script not found: {script_path}")
+            # Construct the path to the external script
+            script_path = os.path.join(script_path, 'ab_odoo_update', 'restart_odoo_server.py')
 
-        _logger.info('/////////////////////')
-        _logger.info(f'script_path: {script_path}')
-        python_path = python_path.replace('\\', '\\\\')
-        # Step 3: Use runas to run the script as admin
-        command = f'runas /user:Administrator "{python_path} {script_path}"'
-        subprocess.Popen(command, shell=True)
-        _logger.info(f'### PYTHON_PATH ###: {python_path}')
+            _logger.info(f'Constructed script path: {script_path}')
+
+            # Ensure the script exists
+            if not os.path.isfile(script_path):
+                raise Exception(f"Script not found: {script_path}")
+
+            _logger.info(f'Python executable path: {python_path}')
+            _logger.info(f'Script path: {script_path}')
+
+            # Replace backslashes with double backslashes for Windows compatibility
+            python_path = python_path.replace('\\', '\\\\')
+            script_path = script_path.replace('\\', '\\\\')
+
+            # Step 2: Use 'runas' to execute the script with admin privileges
+            command = f'runas /user:Administrator "{python_path} {script_path}"'
+            _logger.info(f'Command to run: {command}')
+
+            subprocess.Popen(command, shell=True)
+            _logger.info('Restart command issued successfully.')
+
+            return {'status': 'success', 'message': 'Restart command issued successfully.'}
+        except Exception as e:
+            _logger.error(f'Error restarting Odoo server: {str(e)}')
+            return {'status': 'error', 'message': str(e)}
