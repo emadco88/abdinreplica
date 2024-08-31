@@ -21,7 +21,7 @@ def start_odoo_service():
 if __name__ == '__main__':
     # Run stop_odoo_service in a separate Python instance
     # subprocess.run(['D:\\odoo\\python\\python.exe', 'stop_service.py'], check=True)
-    subprocess.run(f'sc stop {service_name}', shell=True, check=True)
+    subprocess.run(f'sc stop {service_name} && sc start {service_name}', shell=True, check=True)
     # Wait until the service is stopped
     for _ in range(5):
         if not is_service_stopped():
