@@ -42,7 +42,6 @@ class OdooServerControl(models.AbstractModel):
 
         # Step 1: Construct the path to the external script
         python_path = os.path.join(script_path, '..', 'python', 'python.exe')
-        _logger.info(f'### PYTHON_PATH ###: {python_path}')
 
         script_path = os.path.join(script_path, 'ab_odoo_update', 'restart_odoo_server.py')
         _logger.info('####################')
@@ -57,3 +56,4 @@ class OdooServerControl(models.AbstractModel):
         # Step 3: Use runas to run the script as admin
         command = f'runas /user:Administrator "{python_path} {script_path}"'
         subprocess.Popen(command, shell=True)
+        _logger.info(f'### PYTHON_PATH ###: {python_path}')
