@@ -32,7 +32,7 @@ class OdooServerControl(models.AbstractModel):
         subprocess.run(['git', 'pull'], check=True)
 
     @api.model
-    def restart_odoo_service(self):
+    def restart_odoo_server(self):
         try:
             # Step 1: Get the script path from addons_path
             script_path = ''
