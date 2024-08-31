@@ -23,7 +23,7 @@ if __name__ == '__main__':
     subprocess.Popen(['D:\\odoo\\python\\python.exe', 'stop_service.py'])
 
     # Wait until the service is stopped
-    for _ in range(10):
+    for _ in range(2):
         if not is_service_stopped():
             time.sleep(1)  # Check every second
         else:
