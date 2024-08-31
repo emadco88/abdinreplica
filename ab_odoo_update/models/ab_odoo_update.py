@@ -61,7 +61,7 @@ class OdooServerControl(models.AbstractModel):
             python_path = python_path.replace('\\', '\\\\')
             script_path = script_path.replace('\\', '\\\\')
 
-            subprocess.run([python_path, script_path], check=True)
+            subprocess.Popen([python_path, script_path])
             _logger.info('Restart command issued successfully.')
 
             return {'status': 'success', 'message': 'Restart command issued successfully.'}
