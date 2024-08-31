@@ -9,6 +9,7 @@
         'security/record_rules.xml',
         'security/ir.model.access.csv',
         'views/menus.xml',
+        'views/cron_ab_odoo_update.xml',
     ],
     # 'assets': {
     #     'web.assets_backend': [

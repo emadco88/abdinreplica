@@ -1,6 +1,5 @@
 import os
 import subprocess
-import time  # Import the time module for adding a delay
 from odoo import models, api, tools
 from odoo.exceptions import UserError
 
@@ -68,3 +67,25 @@ class OdooServerControl(models.AbstractModel):
         except Exception as e:
             _logger.error(f'Error restarting Odoo server: {str(e)}')
             return {'status': 'error', 'message': str(e)}
+
+    @api.model
+    def upgrade_module(self, module_name):
+        # Ensure the module name is provided
+        if not module_name:
+            raise ValueError("Module name must be provided")
+
+        # Search for the module
+        module = self.env['ir.module.module'].sudo().search([('name', '=', module_name)], limit=1)
+        if not module:
+            raise UserError(f"Module '{module_name}' not found")
+
+        # Check if the module is installed
+        if module.state != 'installed':
+            raise UserError(f"Module '{module_name}' is not installed")
+
+        # Upgrade the module
+        try:
+            module.button_immediate_upgrade()
+            return True
+        except Exception as e:
+            raise e
