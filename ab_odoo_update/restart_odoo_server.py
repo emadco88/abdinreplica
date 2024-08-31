@@ -20,7 +20,7 @@ def start_odoo_service():
 
 if __name__ == '__main__':
     # Run stop_odoo_service in a separate Python instance
-    subprocess.Popen(['D:\\odoo\\python\\python.exe', 'stop_service.py'])
+    subprocess.run(['D:\\odoo\\python\\python.exe', 'stop_service.py'])
 
     # Wait until the service is stopped
     for _ in range(2):
