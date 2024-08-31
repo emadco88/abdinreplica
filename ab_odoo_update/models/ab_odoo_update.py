@@ -47,7 +47,7 @@ class OdooServerControl(models.AbstractModel):
                     break
 
             # Step 1: Construct the path to the external script
-            script_path = os.path.join(script_path, 'ab_odoo_update', 'restart_odoo_server.py')
+            script_path = os.path.join(script_path, 'ab_odoo_update', 'restart_odoo_server5.py')
             _logger.info('####################')
             _logger.info(f'script_path: {script_path}')
             # Step 2: Ensure the script exists
