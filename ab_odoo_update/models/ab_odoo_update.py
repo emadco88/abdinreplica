@@ -61,10 +61,6 @@ class OdooServerControl(models.AbstractModel):
             python_path = python_path.replace('\\', '\\\\')
             script_path = script_path.replace('\\', '\\\\')
 
-            # Step 2: Use 'runas' to execute the script with admin privileges
-            command = f'runas /user:Administrator "{python_path}" "{script_path}"'
-            _logger.info(f'Command to run: \n{command}')
-
             subprocess.run([python_path, script_path], check=True)
             _logger.info('Restart command issued successfully.')
 
