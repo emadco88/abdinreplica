@@ -2,10 +2,7 @@ import os
 import subprocess
 import time  # Import the time module for adding a delay
 from odoo import models, api, tools
-
-import logging
-
-_logger = logging.getLogger(__name__)
+from odoo.exceptions import UserError
 
 
 class OdooServerControl(models.AbstractModel):
@@ -36,18 +33,25 @@ class OdooServerControl(models.AbstractModel):
             return {'status': 'error', 'message': str(e)}
 
     @api.model
-    def restart_odoo_service(self):
+    def restart_odoo_server(self):
         try:
-            # Path to the .bat file or its shortcut
-            bat_file_path = os.path.join(tools.config['addons_path'], 'ab_odoo_update', 'restart_odoo_serverr')
-            _logger.info(f"###################################")
-            _logger.info(f"bat_file_path: {bat_file_path}")
-            # Ensure the .bat file exists
-            if not os.path.isfile(bat_file_path):
-                raise Exception(f"Batch file not found: {bat_file_path}")
+            script_path = ''
+            addons_path = tools.config['addons_path']
+            for path in addons_path.split(','):
+                if 'replica_addons' in path:
+                    script_path = path.strip()
+                    break
 
-            # Run the .bat file (admin privileges should be handled by the shortcut)
-            subprocess.Popen([bat_file_path], shell=True)
+            # Step 1: Construct the path to the external script
+            script_path = os.path.join(script_path, 'ab_odoo_update', 'restart_odoo_server.py')
+
+            # Step 2: Ensure the script exists
+            if not os.path.isfile(script_path):
+                raise UserError(f"Script not found: {script_path}")
+
+            # Step 3: Use runas to run the script as admin
+            command = f'runas /user:Administrator "python {script_path}"'
+            subprocess.Popen(command, shell=True)
 
             return {'status': 'success', 'message': 'Restart command issued successfully.'}
         except Exception as e:
