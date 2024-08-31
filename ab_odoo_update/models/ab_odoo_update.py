@@ -32,10 +32,10 @@ class OdooServerControl(models.AbstractModel):
             return {'status': 'error', 'message': str(e)}
 
     @api.model
-    def restart_odoo_serrice(self):
+    def restart_odoo_service(self):
         try:
             # Path to the .bat file or its shortcut
-            bat_file_path = os.path.join(tools.config['addons_path'], 'ab_odoo_update', 'restart_odoo_server')
+            bat_file_path = os.path.join(tools.config['addons_path'], 'ab_odoo_update', 'restart_odoo_serverr')
 
             # Ensure the .bat file exists
             if not os.path.isfile(bat_file_path):
