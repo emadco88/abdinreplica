@@ -20,6 +20,4 @@ def start_odoo_service():
 
 
 if __name__ == '__main__':
-    stop_odoo_service()
-    time.sleep(2)
-    start_odoo_service()
+    restart_odoo_service()
