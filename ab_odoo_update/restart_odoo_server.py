@@ -5,11 +5,6 @@ import re
 service_name = 'odoo-server-15.0'
 
 
-def stop_odoo_service():
-    """Stop the Odoo service."""
-    subprocess.run(f'sc stop {service_name}', shell=True, check=True)
-
-
 def is_service_stopped():
     """Check if the Odoo service is stopped."""
     result = subprocess.run(f'sc query {service_name}', shell=True, capture_output=True, text=True)
@@ -24,11 +19,14 @@ def start_odoo_service():
 
 
 if __name__ == '__main__':
-    stop_odoo_service()
+    # Run stop_odoo_service in a separate Python instance
+    subprocess.Popen(['D:\\odoo\\python\\python.exe', 'stop_service.py'])
 
-#     # Wait until the service is stopped
-#     for _ in range(10):
-#         if not is_service_stopped():
-#             time.sleep(1)  # Check every second
-#
-#     start_odoo_service()
+    # Wait until the service is stopped
+    for _ in range(10):
+        if not is_service_stopped():
+            time.sleep(1)  # Check every second
+        else:
+            break
+
+    start_odoo_service()
