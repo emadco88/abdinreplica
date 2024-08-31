@@ -3,6 +3,10 @@ import subprocess
 import time  # Import the time module for adding a delay
 from odoo import models, api, tools
 
+import logging
+
+_logger = logging.getLogger(__name__)
+
 
 class OdooServerControl(models.AbstractModel):
     _name = 'ab_odoo_update'
@@ -36,7 +40,8 @@ class OdooServerControl(models.AbstractModel):
         try:
             # Path to the .bat file or its shortcut
             bat_file_path = os.path.join(tools.config['addons_path'], 'ab_odoo_update', 'restart_odoo_serverr')
-
+            _logger.info(f"###################################")
+            _logger.info(f"bat_file_path: {bat_file_path}")
             # Ensure the .bat file exists
             if not os.path.isfile(bat_file_path):
                 raise Exception(f"Batch file not found: {bat_file_path}")
