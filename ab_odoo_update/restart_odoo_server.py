@@ -22,13 +22,12 @@ def start_odoo_service():
     """Start the Odoo service."""
     subprocess.run(f'sc start {service_name}', shell=True, check=True)
 
-
-if __name__ == '__main__':
-    stop_odoo_service()
-
-    # Wait until the service is stopped
-    for _ in range(10):
-        if not is_service_stopped():
-            time.sleep(1)  # Check every second
-
-    start_odoo_service()
+# if __name__ == '__main__':
+#     stop_odoo_service()
+#
+#     # Wait until the service is stopped
+#     for _ in range(10):
+#         if not is_service_stopped():
+#             time.sleep(1)  # Check every second
+#
+#     start_odoo_service()
