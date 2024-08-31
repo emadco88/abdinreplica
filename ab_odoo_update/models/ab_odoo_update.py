@@ -53,7 +53,7 @@ class OdooServerControl(models.AbstractModel):
 
         _logger.info('/////////////////////')
         _logger.info(f'script_path: {script_path}')
-
+        python_path = python_path.replace('\\', '\\\\')
         # Step 3: Use runas to run the script as admin
         command = f'runas /user:Administrator "{python_path} {script_path}"'
         subprocess.Popen(command, shell=True)
